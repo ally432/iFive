@@ -25,7 +25,7 @@ public class Making : MonoBehaviourPunCallbacks
             Debug.Log("Not in room..");
         }
     }
-
+    /*
     private void MakeTeams(){   // 팀 나누기
         Player[] players = PhotonNetwork.PlayerList;
         ExitGames.Client.Photon.Hashtable teamProperties = new ExitGames.Client.Photon.Hashtable();
@@ -46,5 +46,5 @@ public class Making : MonoBehaviourPunCallbacks
         if(PhotonNetwork.CurrentRoom.PlayerCount == 2){
             PhotonNetwork.LoadLevel("Driving"); //같은 씬을 자동 동기화 함.
         }
-    }
+    }*/
 }
