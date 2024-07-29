@@ -12,11 +12,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public GameObject roomListingPrefab; // 방 리스트 prefab
 
     void Start()
-    {   
+    {
+        // 지역 설정 (예: 아시아 지역)
+        PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion = "asia";
+
         // 서버에 연결
         PhotonNetwork.ConnectUsingSettings();
 
-         // 자동 씬 동기화 활성화
+        // 자동 씬 동기화 활성화
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
@@ -31,30 +34,37 @@ public class RoomManager : MonoBehaviourPunCallbacks
         Debug.Log("로비 참가");
     }
 
-    public void SetRoom(){  // 버튼 클릭 시 방 생성
+    public void SetRoom()
+    {  // 버튼 클릭 시 방 생성
         string roomName = roomName_input.text;
-        if(!string.IsNullOrEmpty(roomName)){
+        if (!string.IsNullOrEmpty(roomName))
+        {
             RoomOptions roomOptions = new RoomOptions();
             roomOptions.MaxPlayers = 4;
+            roomOptions.IsVisible = true;
+            roomOptions.IsOpen = true;
             PhotonNetwork.CreateRoom(roomName, roomOptions);
         }
+    }
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        Debug.Log("방 생성 실패: " + message);
     }
 
     public override void OnCreatedRoom()
     {
         Debug.Log("방 이름: " + PhotonNetwork.CurrentRoom.Name);
-        if(PhotonNetwork.IsMasterClient){
+        if (PhotonNetwork.IsMasterClient)
+        {
             PhotonNetwork.LoadLevel("Driving"); // 씬 전환
-        }        
-    }
-
-    public override void OnCreateRoomFailed(short returnCode, string message)
-    {
-        Debug.Log("Failed: " + message);
+        }
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+        Debug.Log("방 목록 업데이트됨. 방 수: " + roomList.Count);
+
         foreach (Transform child in content)
         {
             Destroy(child.gameObject); // 기존 방 목록 삭제
@@ -70,19 +80,24 @@ public class RoomManager : MonoBehaviourPunCallbacks
             // 방 새로 추가
             GameObject roomListing = Instantiate(roomListingPrefab, content);
             TextMeshProUGUI roomText = roomListing.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-               
-            if(roomText != null){
+
+            if (roomText != null)
+            {
                 roomText.text = room.Name;
-            }    
-            else{
+            }
+            else
+            {
                 Debug.Log("error!");
             }
 
             Button roomButton = roomListing.GetComponent<Button>();
-            if(roomButton != null){ // 방 목록으로 뜨는 버튼
+            if (roomButton != null) // 방 목록으로 뜨는 버튼
+            {
+                string roomName = room.Name;
                 roomButton.onClick.AddListener(() => OnClickJoinRoom(room.Name));
             }
-            else{
+            else
+            {
                 Debug.Log("no btn!");
             }
         }
@@ -96,10 +111,35 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("Joined Room: " + PhotonNetwork.CurrentRoom.Name);
+        UpdatePlayerList();
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         Debug.Log("Join room failed: " + message);
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        Debug.Log("Player Entered Room: " + newPlayer.NickName);
+        UpdatePlayerList();
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        Debug.Log("Player Left Room: " + otherPlayer.NickName);
+        UpdatePlayerList();
+    }
+
+    private void UpdatePlayerList()
+    {
+        // 여기에서 방에 있는 플레이어 목록을 UI에 갱신합니다.
+        // 예를 들어, UI 요소를 사용하여 플레이어 목록을 표시할 수 있습니다.
+        // PhotonNetwork.PlayerList 또는 PhotonNetwork.PlayerListOthers를 사용하여 플레이어 정보를 가져올 수 있습니다.
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            Debug.Log("Player in Room: " + player.NickName);
+            // UI에 플레이어 정보를 표시하는 로직 추가
+        }
     }
 }
