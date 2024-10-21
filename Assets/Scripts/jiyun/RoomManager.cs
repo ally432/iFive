@@ -57,7 +57,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         if (roomText != null)
         {
-            roomText.text = $"{roomName} ({playerCount}/2)";
+            roomText.text = $"{roomName} ({playerCount}/6)";
         }
         else
         {
