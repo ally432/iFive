@@ -1,6 +1,6 @@
 # 🚗 Battle Circuit (배틀 서킷)
 
-![배틀서킷](screenshots/배틀서킷.png)
+<img src="screenshots/배틀서킷.png" alt="배틀서킷" width="500"/>
 
 ---
 
@@ -77,10 +77,14 @@
 ---
 
 ## 📸 실제 플레이 화면
-![배틀서킷](screenshots/로비.png)
-![배틀서킷](screenshots/로딩.png)
-![배틀서킷](screenshots/플레이화면1.png)
-![배틀서킷](screenshots/플레이화면2.png)
+<p>
+  <img src="screenshots/로비.png" alt="로비" width="500"/>
+  <img src="screenshots/로딩.png" alt="로딩" width="500"/>
+</p>
+<p>
+  <img src="screenshots/플레이화면1.png" alt="플레이화면1" width="500"/>
+  <img src="screenshots/플레이화면2.png" alt="플레이화면2" width="500"/>
+</p>
 
 ---
 
